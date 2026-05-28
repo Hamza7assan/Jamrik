@@ -1,0 +1,14 @@
+
+# Python
+jamrik-ai-service/.env
+jamrik-ai-service/venv/
+jamrik-ai-service/__pycache__/
+
+# Java/Spring Boot
+jamrik-final/backend/target/
+jamrik-final/backend/.env
+
+# Next.js/React
+jamrik-final/frontend/node_modules/
+jamrik-final/frontend/.next/
+jamrik-final/frontend/.env
