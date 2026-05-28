@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; color: #333; }
+        .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        .section { margin-top: 20px; }
+        .footer { margin-top: 50px; font-size: 12px; text-align: center; color: #777; }
+        .highlight { font-weight: bold; color: #d9534f; }
+        
+    
+         table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+            table-layout: fixed; /* THIS FIXES THE SHIFTING */
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 8px; 
+            text-align: center; /* Center everything by default */
+            word-wrap: break-word; /* Prevents text from pushing boundaries */
+        }
+        th { background-color: #f2f2f2; }
+
+        /* Column Specifics */
+        .col-desc { width: 35%; text-align: left; }
+        .col-qty { width: 10%; }
+        .col-price { width: 15%; }
+        .col-hs { width: 25%; font-family: monospace; font-size: 11px; }
+        .col-duty { width: 15%; }
+        /* General Information Table Specifics */
+        .info-table th { width: 30%; text-align: left; }
+        .info-table td { width: 70%; text-align: left; }
+        .info-table tr { height: auto; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>JAMRIK - Customs Declaration</h1>
+        <p>Official Automated AI Declaration Service - Jordan</p>
+    </div>
+
+    <div class="section">
+        <h3>1. General Information</h3>
+        <table class="info-table">
+            <tr>
+                <th>Supplier/Exporter</th>
+                <td>{{ supplier_name }}</td>
+            </tr>
+            <tr>
+                <th>Currency</th>
+                <td>{{ currency }}</td>
+            </tr>
+            <tr>
+                <th>Total Invoice Amount</th>
+                <td>{{ total_amount }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h3>2. Item Classification & Duty</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-desc">Description</th>
+                    <th class="col-qty">Quantity</th>
+                    <th class="col-price">Unit Price</th>
+                    <th class="col-hs">HS Code</th>
+                    <th class="col-duty">Duty Rate</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ items_table }}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        <p>This document was generated automatically by JAMRIK AI Engine.</p>
+        <p>Date Generated: {{ date_generated }}</p>
+    </div>
+</body>
+</html>
