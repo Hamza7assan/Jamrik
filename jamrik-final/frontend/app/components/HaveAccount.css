@@ -1,0 +1,13 @@
+.HaveAccount{
+            margin: 40px 0px 50px 0px;
+            display: flex; 
+            justify-content: center;
+}
+.HaveAccount .left{
+           font-size: 18px;
+            color: #404040;
+}
+.HaveAccount .right{
+           color:#1C398E;
+           cursor: pointer;
+}

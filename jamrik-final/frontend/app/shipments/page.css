@@ -1,0 +1,265 @@
+.ShipmentsContainer{
+    min-height: 100vh;
+}
+.allShipmentsTableContainer{
+    background-color: white;
+    border: 1px solid #D4D4D4;
+    border-radius: 15px;
+    padding: 12px 12px;
+}
+.allShipmentsTittle{
+    font-size: 20px;
+    font-weight: 500;
+    color: #171717;
+    margin-bottom: 8px;
+}
+.allShipmentsNumber{
+    font-size: 16px;
+    color: #525252;
+    margin-bottom: 8px;
+}
+.selectedShipmentContainer{
+    background-color: white;
+    border: 1px solid #D4D4D4;
+    border-radius: 15px;
+    padding: 0px 12px 12px 12px;
+    min-width: 68.1%;
+   flex: 1; 
+   display: flex;
+   flex-direction: column;
+}
+.selectedShipmentUploadedDocumentsContainer{
+    background-color: #D9D9D9;
+    border: 1px solid #D4D4D4;
+    border-radius: 15px;
+    padding: 12px;
+    margin: 12px 0px;
+    height: 100%;
+}
+.ShipmentBtnsContainer{
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.analyzeShipmentDocumentsButton, .generateFormButton{
+    background-color: #807F88;
+    color: white;
+    font-size: 16px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    margin: 20px 0px;
+    width: 100%;
+}
+.analyzeShipmentDocumentsButton:hover, .generateFormButton:hover{
+    background-color: #193CB8;
+}
+.aiResultsTitle{
+    font-size: 18px;
+    font-weight: 500;
+    color: #171717;
+    margin-bottom: 8px;
+}
+.aiResultsContent{
+    font-size: 14px;
+}
+.addDocumentButton {
+    color: #2B4B8A;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+.addDocumentButton:hover {
+    text-decoration: underline;
+}
+
+.uploadedFilesList {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.uploadedFileCard {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    border: 1px solid #D4D4D4;
+    padding: 2px 0px 2px 4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+}
+
+.fileNameText {
+    font-size: 14px;
+    color: #525252;
+}
+
+.uploadedFileCard span:nth-child(2) {
+    font-size: 14px;
+    color: #171717;
+    margin-top: 4px;
+}
+
+.removeFileBtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 8px;
+    color: #525252;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.removeFileBtn:hover {
+    color: #d9534f;
+}
+
+/* Customs Declaration PDF Viewer Modal */
+.customsModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.customsModalContent {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    width: 80%;
+    max-width: 900px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+    overflow: hidden;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.customsModalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #E5E5E5;
+    background-color: #1C398E;
+}
+
+.customsModalTitle {
+    font-size: 18px;
+    font-weight: 600;
+    color: #FFFFFF;
+    margin: 0;
+}
+
+.customsModalCloseBtn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #FFFFFF;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.customsModalCloseBtn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.customsModalBody {
+    flex: 1;
+    padding: 0;
+    overflow: hidden;
+}
+
+.customsPdfIframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.customsModalFooter {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #E5E5E5;
+    background-color: #F9F9F9;
+}
+
+.customsDownloadBtn {
+    background-color: #1C398E;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.customsDownloadBtn:hover {
+    background-color: #16306B;
+    transform: translateY(-1px);
+}
+
+.customsCloseFooterBtn {
+    background-color: #E5E5E5;
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.customsCloseFooterBtn:hover {
+    background-color: #D4D4D4;
+}
+
+/* Generate button disabled state */
+.generateFormButton:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #A0A0A0;
+}
+
+.generateFormButton:disabled:hover {
+    background-color: #A0A0A0;
+}

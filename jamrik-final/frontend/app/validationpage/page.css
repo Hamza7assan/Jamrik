@@ -1,0 +1,80 @@
+.validationPageContainer {
+    background-image: url('/images/validationPageBackground.png');
+    background-size: cover; ;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+}
+.validationPageFileUploadContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    width: 100%;
+    gap: 20px;
+}
+.validationPageFileInputContainer {
+    background-color: #f9f9f9;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ccc;
+    flex-wrap: wrap;
+    height: 80px;
+    width: 240px;
+    overflow: hidden;
+}
+.validationPageSelect {
+    padding: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+.validationPageValidateButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:#807F88;
+    width:15%;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    margin: 20px 0px;
+}
+.validationPageValidateButton:hover{
+background-color: #193CB8;
+ }
+ .validationResultTitle{
+    font-size: 18px;
+    font-weight: 600;
+    color: #171717;
+    margin-bottom: 8px;
+}
+.AiValidationResultContainer{
+background-color: #FFFFFF;  
+border-radius: 10px;
+box-shadow: 0px 4px 6px #9F9F9F;
+padding: 16px 10px;
+min-height: 220px;
+overflow-y: auto;
+overflow-x: hidden;
+font-size: 14px;
+}
+
+.validationErrorBox {
+    background-color: #fee2e2;
+    border-left: 4px solid #ef4444;
+    color: #b91c1c;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-width: 600px;
+}
+
+.validationErrorIcon {
+    font-weight: bold;
+    font-size: 18px;
+}

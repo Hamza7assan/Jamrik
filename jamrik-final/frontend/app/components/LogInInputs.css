@@ -1,0 +1,44 @@
+
+        .inputField {
+           border: none;
+           outline: none;
+           width: 100%;
+           font-size: 16px;
+        }
+
+         .inputLabel {
+            font-weight: bold;
+             font-size: 16px;
+             color: #404040;
+        }
+        .inputIcon {
+            width: 24px;
+            height: 24px;
+           position: relative;
+            margin-right: 5px;
+        }
+        .iconWrapper {
+          display: flex;
+          align-items: center;
+          border: 1px solid #CCCCCC;
+          border-radius: 8px;
+          padding: 8px 12px;
+          background-color: white;
+          width: 100%;
+          margin-top: 5px;
+          box-sizing: border-box;
+        }
+        
+        .eyeIcon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+            text-align: right;
+            cursor: pointer;
+        }
+
+.inputFieldError::placeholder {
+  color: rgba(255, 0, 0, 0.678);
+  opacity: 1; /* Ensures color shows clearly */
+} 
+        

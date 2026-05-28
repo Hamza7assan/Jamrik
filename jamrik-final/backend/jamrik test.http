@@ -1,0 +1,44 @@
+### GET request to example server
+GET http://localhost:8080
+### GET request to test
+GET http://localhost:8080/jamrik/hs
+
+### POST to test
+POST http://localhost:8080/jamrik/newShipment
+Content-Type: application/json
+
+{
+  "trackingNumber": "TEST12345"
+}
+### POST to test
+POST http://localhost:8080/jamrik/register
+Content-Type: application/json
+
+{
+"userName": "ahmed",
+"email": "ahmed@example.com",
+"password": "Karam123",
+"role": "USER",
+"about": "This is a test account for my MVP."
+}
+### POST to test
+POST http://localhost:8080/jamrik/login
+Content-Type: application/json
+
+{
+  "userName": "ahmed",
+  "password": "Karam123"
+}
+### PUT to test
+PUT http://localhost:8080/jamrik/changeData/ahmed
+Content-Type: application/json
+
+{
+  "userName": "ahmed",
+  "email": "ahmed@example.com",
+  "role": "USER",
+  "avatar": "0"
+}
+
+
+

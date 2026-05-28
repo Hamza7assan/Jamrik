@@ -1,0 +1,29 @@
+       .button{
+            width: 100%;
+            padding: 10px 0px;
+            background-color: #1C398E;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid #CCCCCC;
+            width: 100%;
+            margin: 20px 0px 10px 0px;
+            box-sizing: border-box;
+        }
+        .button:hover{
+            background-color: #193CB8;
+        }
+        .buttonIcon {
+            width: 24px;
+            height: 24px;
+            margin-right: 5px;
+        }
+       .buttonText {
+            font-weight: bold;
+            color: #FFFFFF;
+            font-size: 18px;
+        }

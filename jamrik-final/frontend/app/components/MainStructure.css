@@ -1,0 +1,91 @@
+.mainStructure {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+}
+.leftSide{
+    background-color: #1C398E;
+    width:15%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.rightSide{
+    background-color: #EDEDED;
+    width: 85%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.logoContainer{
+    display: flex;
+    align-items: center;
+    height: 64px;
+    font-size: 24px;
+    color:white;
+    border-bottom: 1px solid white;
+    gap:8px;
+    padding-left:8px;
+}
+.leftBar{
+    padding:24px 16px;
+    align-items: center;
+    justify-content: center;
+    gap:32px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+.header{
+    height: 64px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding:0px 20px;
+    font-size: 24px;
+}
+.LeftBarItems{
+    display: flex;
+    flex-direction: row;
+    color:white;
+    font-size: 18px;
+    gap:8px;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+.LeftBarItems:hover{
+            background-color: #193CB8;
+        }
+
+.notificationAccount{
+        display: flex;
+        flex-direction: row;
+        font-size: 16px;
+        align-items: center;
+}
+.bellIcon{
+    cursor: pointer;
+}
+.accountContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+}
+.accountIcon{
+    cursor: pointer;
+    padding:15% 0px 0px 18%;
+}
+.accountInfo{
+    display: flex;
+    flex-direction: column;
+    font-size: 16px;
+}
+.accountRole{
+    font-size: 14px;
+}
+.pageContent{
+    padding: 20px;
+}

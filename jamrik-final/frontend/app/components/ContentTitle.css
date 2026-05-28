@@ -1,0 +1,12 @@
+.ContentTitle {
+    font-size: 24px;
+    font-weight: 500;
+    color: #000000;
+}
+
+.ContentSubtitle {
+    font-size: 20px;
+    color: #525252;
+    font-weight: lighter;
+    margin-bottom: 20px;
+}

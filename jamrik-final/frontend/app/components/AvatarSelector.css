@@ -1,0 +1,59 @@
+
+.avatarGrid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); 
+    gap: 40px; 
+    justify-items: center;
+}
+
+.selectableAvatarFrame {
+    width: 94px; 
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.selectableAvatarFrame:hover {
+    transform: scale(1.05); 
+    border-color: #9F9F9F;
+}
+
+.selectableAvatarFrame.activeAvatar {
+    border-color: #60a5fa; 
+    background-color: #eff6ff; 
+}
+
+.spriteWindow {
+    width: 81.5px; 
+    height: 49px;
+    border-radius: 50%; 
+    
+    background-image: url('/images/profileAvatars.jpeg');
+    
+    /* SCALE THE MAP: We need to tell CSS how big the WHOLE sheet is 
+       relative to our window. If we want our 100px window, and we have 6 columns...
+       the background-width must be 600px (100 * 6). */
+    background-size: 600px 200px; /* [Width of 6] [Height of 2] */
+    
+    background-repeat: no-repeat;
+    display: block;
+}
+
+
+.avatar-index-0 { background-position: -27px -25px; }
+.avatar-index-1 { background-position: -119.5px -25px; }
+.avatar-index-2 { background-position: -213px -25px; }
+.avatar-index-3 { background-position: -306.5px -25px; }
+.avatar-index-4 { background-position: -399.5px -25px; }
+.avatar-index-5 { background-position: -492.5px -25px; }
+.avatar-index-6  { background-position: -27px -137px; }
+.avatar-index-7  { background-position: -120px -137px; }
+.avatar-index-8  { background-position: -213px -137px; }
+.avatar-index-9  { background-position: -492.5px -81px; }
+.avatar-index-10 { background-position: -399.5px -137px; }
+.avatar-index-11 { background-position: -492.5px -137px; }

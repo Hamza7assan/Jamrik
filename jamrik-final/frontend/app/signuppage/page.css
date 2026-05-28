@@ -1,0 +1,78 @@
+.SignUpPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #EDEDED;
+    text-align: center;
+}
+.whiteBoxSignup {
+            background-color: #FFFFFF;
+            border-radius: 30px; 
+            box-shadow: 0px 4px 6px #9F9F9F;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            padding : 20px 20px;
+            margin: 13px;
+            text-align: start;
+            width: 841px;
+        }
+
+        .subTitle {
+            font-weight: 600;
+            font-size: 24px;
+            color: #000000;
+        }
+
+        .underSubtitle {
+            font-weight: lighter;
+            font-size: 20px;
+            color: #525252;
+            margin-bottom: 16px;
+        }
+        
+        .hr{
+            margin-top: 30px;
+            width: 100%;
+            border: 1.5px solid #A6A6A6;
+            margin-left: 0px;
+        }
+        .SignUpPageInputsContainer {
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0px 16px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .selectField {
+          display: flex;
+          align-items: center;
+          border: 1px solid #CCCCCC;
+          border-radius: 8px;
+          padding: 8px 12px;
+          background-color: white;
+          width: 100%;
+          margin-top: 5px;
+          box-sizing: border-box;
+        }
+        select{
+            color: #757575;
+            border:none;
+            outline:none;
+        }
+        select option {
+         color: black;
+         }
+         .inputLabel {
+            font-weight: bold;
+             font-size: 16px;
+             color: #404040;
+        }
+        .selectContainer{
+          margin: 16px 0px;
+        }
+        
+
+
+          

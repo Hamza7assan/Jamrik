@@ -1,0 +1,58 @@
+.hsCodeAssistantContainer{
+    min-height: 100vh;
+}
+.whatsHSCodeContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background-color: #EFF6FF;
+    border-radius: 10px;
+    border: 1px solid #609DEB;
+    box-shadow: 0px 4px 6px #9F9F9F;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.describeYourProductContainer{
+    padding: 12px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px #9F9F9F;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.productName, .productDescription{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.productName, .productDescription label{
+    font-size: 16px;
+    color: #171717;
+    font-weight: 400;
+    margin-top: 16px;
+}
+.productName input, .productDescription textarea{
+    padding: 8px;
+    border: 1px solid #D4D4D4;
+    border-radius: 10px;
+    font-size: 16px;
+}
+.productName input, .productDescription textarea:focus{
+    outline: none;
+    border-color: #D4D4D4;
+    box-shadow: 0px 0px 5px #D4D4D4;
+}
+.productName input{
+    min-height: 25px;
+}
+.productDescription textarea{
+    min-height: 80px;
+}
+.describeYourProductContainer button{
+    background-color:#807F88;
+    width: fit-content;
+    font-size: 14px;
+    padding: 8px 16px;
+}

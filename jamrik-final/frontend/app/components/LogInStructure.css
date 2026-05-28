@@ -1,0 +1,16 @@
+.logo{
+    width:135px;
+    height: 135px;
+    margin: 0px 0px -5px 0px;
+    border-radius: 100px;
+}
+.title{
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0px 0px -5px 0px;
+}
+.subtitle{
+    font-size: 22px;
+    font-weight: lighter;
+    margin: 0px 0px -5px 0px;
+}

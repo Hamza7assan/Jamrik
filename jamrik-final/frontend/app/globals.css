@@ -1,0 +1,22 @@
+* {
+   box-sizing: border-box;
+   padding: 0px;
+   margin: 0px;
+   font-family: 'inter';
+}
+*::before, *::after {
+   box-sizing: border-box;
+}
+/* Hide the default eye icon in Microsoft Edge */
+input::-ms-reveal {
+    display: none;
+}
+
+/* Hide the default eye icon in Chrome/Safari (if it appears) */
+input::-webkit-contacts-auto-fill-button,
+input::-webkit-credentials-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+    pointer-events: none;
+}
+

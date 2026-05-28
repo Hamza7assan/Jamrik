@@ -1,0 +1,97 @@
+.dashboardContainer{
+    min-height: 100vh;
+}
+.dashboardCardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.dashboardTopCards {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+.dashboardFeatureExplanationCardsBox{
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px #9F9F9F;
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    gap:8px;
+    flex: 1 1 300px;
+    max-height: 180px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.dashboardFeatureExplanationCardsBox::-webkit-scrollbar {
+  width: 6px;              
+}
+.dashboardFeatureExplanationCardsBox::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* A light gray color */
+  border-radius: 20px;       /* Rounds the edges for a modern look */
+}
+.dashboardFeatureExplanationCardsTitle{
+    font-size: 18px;
+    color: #171717;
+    font-weight: 600;
+}
+.featureExplanationCardsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+}
+.featureExplanationItemCard{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 8px;
+    font-size: 16px;
+    color: #171717;
+    cursor: pointer;
+}
+.featureExplanationItemCard:hover{
+    background-color: rgba(96, 156, 235, 0.2);
+}
+
+.dashboardBottomCard {
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px #9F9F9F;
+    display: flex;
+    flex-direction: row;
+    padding: 16px 12px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.issuesDetectedCardRef {
+    font-size: 14px;
+    color: #525252;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+
+.dashboardBottomCardTitle {
+    font-size: 18px;
+    color: #171717;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.dashboardBottomCardSubtitle {
+    font-size: 16px;
+    color: #171717;
+    font-weight: 400;
+}
+
+hr {
+    margin: 0px;
+}
