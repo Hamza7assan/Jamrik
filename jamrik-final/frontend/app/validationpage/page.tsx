@@ -6,6 +6,8 @@ import Image from "next/image";
 import { LanguageContext } from "../components/LanguageContext";
 import "./page.css";
 import { toast } from "sonner";
+import { jamrikFetch } from "../utils/apiClient";
+
 
 const ValidationPage = () => {
     const { t } = useContext(LanguageContext);
@@ -93,7 +95,7 @@ const handleValidate = async () => {
 
         try {
             // 4. API Request to Spring Boot Endpoint (Proxy)
-            const response = await fetch("http://localhost:8080/api/ai/validate-two-invoices", {
+            const response = await jamrikFetch("http://localhost:8080/api/ai/validate-two-invoices", {
                 method: "POST",
                 credentials: "include",
                 body: formData

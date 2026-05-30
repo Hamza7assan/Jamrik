@@ -7,6 +7,8 @@ import { useState, useRef, useContext } from "react";
 import Button from "../components/Button";
 import { LanguageContext } from "../components/LanguageContext";
 import { toast } from "sonner";
+import { jamrikFetch } from "../utils/apiClient";
+
 
 const HsCodeAssistant = () => {
     const { t } = useContext(LanguageContext);
@@ -37,7 +39,7 @@ const HsCodeAssistant = () => {
                 description: productDescription
             };
 
-            const response = await fetch(url, {
+            const response = await jamrikFetch(url, {
                 method: "POST", // 3. The request method must be POST
                 credentials: "omit", // Omit credentials to avoid potential CORS issues
                 headers: {

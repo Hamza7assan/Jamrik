@@ -7,6 +7,8 @@ import ShipmentsCard from "../components/ShipmentsCard";
 import { useState ,useEffect, useContext } from "react";
 import { LanguageContext } from "../components/LanguageContext";
 import { toast } from "sonner";
+import { jamrikFetch } from "../utils/apiClient";
+
 import Button from "../components/Button"; // Or simply use native buttons
 const Shipments = () => {
     const { t } = useContext(LanguageContext);
@@ -21,7 +23,7 @@ const Shipments = () => {
     useEffect(() => {
         const fetchShipments = async () => {
             try {
-                const response = await fetch("http://localhost:8080/jamrik/shipments/searchAll", { credentials: "include" }); 
+                const response = await jamrikFetch("http://localhost:8080/jamrik/shipments/searchAll", { credentials: "include" }); 
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -83,7 +85,7 @@ const Shipments = () => {
         try {
             const url = `http://localhost:8080/jamrik/shipments/deleteShipment?referenceNumber=${referenceNumber}`;
             
-            const response = await fetch(url, {
+            const response = await jamrikFetch(url, {
                 method: "DELETE",
                 credentials: "include",
             });
@@ -119,7 +121,7 @@ const Shipments = () => {
             const encodedRef = encodeURIComponent(clickedShipmentData.referenceNumber);
             const url = `http://localhost:8080/jamrik/shipments/searchAllDocs?referenceNumber=${encodedRef}`;
             
-            const response = await fetch(url, { credentials: "include" });
+            const response = await jamrikFetch(url, { credentials: "include" });
             
             if (!response.ok) {
                 const errorText = await response.text();
@@ -144,7 +146,7 @@ useEffect(() => {
             const toastId = toast.loading(t("Deleting document..."));
             try {
                 const url = `http://localhost:8080/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
-                const response = await fetch(url, { method: "DELETE", credentials: "include" });
+                const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
 
                 if (response.ok) {
                     setAllDocuments(prev => prev.filter(doc => doc.documentName !== documentName));
@@ -197,7 +199,7 @@ useEffect(() => {
 
         const toastId = toast.loading(t("Uploading document..."));
         try {
-            const response = await fetch(`http://localhost:8080/jamrik/documents/uploadOne/${encodeURIComponent(uploadShipmentReference)}`, {
+            const response = await jamrikFetch(`http://localhost:8080/jamrik/documents/uploadOne/${encodeURIComponent(uploadShipmentReference)}`, {
                 method: "POST",
                 credentials: "include",
                 body: formData,
@@ -244,7 +246,7 @@ const handleAnalyzeDocuments = async () => {
         // 4. Construct URL targeted directly at our new proxy endpoint
         const url = `http://localhost:8080/api/ai/analyze-documents?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
         
-        const response = await fetch(url, {
+        const response = await jamrikFetch(url, {
             method: "POST", // Using POST since Spring proxy is PostMapping
             credentials: "include",
         });
@@ -331,7 +333,7 @@ const handleGenerateCustomsDeclaration = async () => {
 
     try {
         const url = `http://localhost:8080/api/ai/generate-declaration?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
-        const response = await fetch(url, {
+        const response = await jamrikFetch(url, {
             method: "POST",
             credentials: "include",
         });
@@ -346,7 +348,7 @@ const handleGenerateCustomsDeclaration = async () => {
             const pdfUrl = `http://localhost:8000${data.download_url}`;
             
             // Fetch the PDF blob from FastAPI
-            const pdfResponse = await fetch(pdfUrl);
+            const pdfResponse = await jamrikFetch(pdfUrl);
             const blob = await pdfResponse.blob();
             const localPdfUrl = URL.createObjectURL(blob);
 

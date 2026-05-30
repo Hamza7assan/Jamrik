@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import LogInInputs from "../components/LogInInputs";
 import { LanguageContext } from "../components/LanguageContext";
 import { toast } from "sonner";
+import { jamrikFetch } from "../utils/apiClient";
+
 
 type UploadedDocs = {
   [key: string]: File[];
@@ -107,7 +109,7 @@ const handleSubmit2 = async (e: React.FormEvent) => {
 
     const toastId = toast.loading(t("Creating shipment..."));
     try {
-        const response = await fetch(`http://localhost:8080/jamrik/shipments/newShipment`, {
+        const response = await jamrikFetch(`http://localhost:8080/jamrik/shipments/newShipment`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -179,7 +181,7 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
         formData.append("metadata", JSON.stringify(metadata));
 
         // Send the request without setting manual Content-Type headers
-        const response = await fetch(url, {
+        const response = await jamrikFetch(url, {
           method: "POST",
           credentials: "include",
           body: formData, // Browser handles boundaries automatically
@@ -201,7 +203,7 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
 const triggerPdfGeneration = async (referenceNumber: string) => {
     const toastId = toast.loading(t("Generating Customs Declaration PDF..."));
     try {
-        const response = await fetch(`http://localhost:8080/jamrik/shipments/generateCustomsDeclaration?referenceNumber=${referenceNumber}`, {
+        const response = await jamrikFetch(`http://localhost:8080/jamrik/shipments/generateCustomsDeclaration?referenceNumber=${referenceNumber}`, {
             method: "POST",
             credentials: "include"
         });

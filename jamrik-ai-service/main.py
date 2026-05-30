@@ -51,7 +51,7 @@ def generate_content_with_fallback(model_name: str, contents):
 
 # --- 2. Vector Database Connection ---
 chroma_client = chromadb.PersistentClient(path="./jamrik_vectordb")
-customs_collection = chroma_client.get_collection(name="jordanian_customs_laws")
+customs_collection = chroma_client.get_or_create_collection(name="jordanian_customs_laws")
 
 app = FastAPI(title="JAMRIK AI Customs Engine - Master Build v4.5.1")
 from fastapi.middleware.cors import CORSMiddleware

@@ -7,6 +7,8 @@ import UserContext from "../components/UserContext";
 import { LanguageContext } from "../components/LanguageContext";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { jamrikFetch } from "../utils/apiClient";
+
 const ChangePasswordPage = () => {
     const router = useRouter();
     const oldPasswordRef = useRef<HTMLInputElement>(null);
@@ -46,7 +48,7 @@ const ChangePasswordPage = () => {
         const toastId = toast.loading(t("Changing password..."));
         try {
             const url = `http://localhost:8080/jamrik/changePassword/${encodeURIComponent(userName)}`;
-            const response = await fetch(url, {
+            const response = await jamrikFetch(url, {
                 method: "PUT",
                 credentials: "include",
                 headers: {

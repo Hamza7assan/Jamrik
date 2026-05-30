@@ -11,13 +11,15 @@ type ShipmentsCardProps = {
 import { toast } from "sonner";
 import { useContext } from "react";
 import { LanguageContext } from "./LanguageContext";
+import { jamrikFetch } from "../utils/apiClient";
+
 const ShipmentsCard = ({shipmentName, referenceNumber,status, handleDeleteShipment,isSelected,handleClick, handleStatusUpdate, isCompact }: ShipmentsCardProps & { handleClick: (id: string) => void }) => {
     const { t } = useContext(LanguageContext);
     const handleStatusChange = async (newStatus: string) => {
     try {
         const url = `http://localhost:8080/jamrik/shipments/changeStatus/${encodeURIComponent(referenceNumber)}?status=${encodeURIComponent(newStatus)}`;
         
-        const response = await fetch(url, {
+        const response = await jamrikFetch(url, {
             method: "POST",
             credentials: "include",
         });
