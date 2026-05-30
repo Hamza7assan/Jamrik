@@ -16,11 +16,11 @@ jobs:
         with:
           node-version: '20'
       - name: Install dependencies
-        run: cd frontend && npm install
+        run: cd jamrik-final/frontend && npm install
       - name: Run Unit Tests
-        run: cd frontend && npm run test:unit
+        run: cd jamrik-final/frontend && npm run test:unit
       - name: Run Integration Tests
-        run: cd frontend && npm run test:integration
+        run: cd jamrik-final/frontend && npm run test:integration
 
   backend-tests:
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
       - name: Run Maven Tests (Unit & Integration)
-        run: cd backend && chmod +x mvnw && ./mvnw test
+        run: cd jamrik-final/backend && chmod +x mvnw && ./mvnw test
 
   build-and-push:
     needs: [frontend-tests, backend-tests]
@@ -55,15 +55,15 @@ jobs:
       - name: Build and Push Backend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./backend
-          file: ./backend/Dockerfile
+          context: ./jamrik-final/backend
+          file: ./jamrik-final/backend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/jamrik_app:latest
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: ./jamrik-final/frontend
+          file: ./jamrik-final/frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/jamrik_frontend:latest

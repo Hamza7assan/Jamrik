@@ -62,7 +62,7 @@ jobs:
 
     - name: Build Java manually
       if: matrix.language == 'java'
-      run: cd backend && chmod +x mvnw && ./mvnw clean package -DskipTests
+      run: cd jamrik-final/backend && chmod +x mvnw && ./mvnw clean package -DskipTests
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
