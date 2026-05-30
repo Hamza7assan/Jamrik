@@ -4,13 +4,13 @@ import csv
 print("Connecting to the local Vector Database...")
 client = chromadb.PersistentClient(path="./jamrik_vectordb")
 
-# Clean up the old database if it exists to avoid duplicates
+#Clean up the old database if it exists to avoid duplicates
 try:
     client.delete_collection(name="jordanian_customs_laws")
 except Exception:
     pass
 
-# Create a new collection (This automatically uses the local AI embedding model)
+# Create a new collection 
 collection = client.create_collection(name="jordanian_customs_laws")
 
 print("Reading 7000+ rows from CSV and converting to Vectors...")

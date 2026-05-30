@@ -15,7 +15,7 @@ import logging
 
 import itertools
 
-# --- 1. Configuration & Security ---
+# 1 Configuration & Security
 load_dotenv()
 API_KEYS = [
     os.getenv("GEMINI_API_KEY_1"),
@@ -49,14 +49,14 @@ def generate_content_with_fallback(model_name: str, contents):
                 
     raise HTTPException(status_code=503, detail="All AI providers are currently overloaded. Please try again later.")
 
-# --- 2. Vector Database Connection ---
+# 2 Vector Database Connection ---
 chroma_client = chromadb.PersistentClient(path="./jamrik_vectordb")
 customs_collection = chroma_client.get_or_create_collection(name="jordanian_customs_laws")
 
 app = FastAPI(title="JAMRIK AI Customs Engine - Master Build v4.5.1")
 from fastapi.middleware.cors import CORSMiddleware
 
-# Allow Spring Boot (8080) and your Frontend to talk to FastAPI
+# Allow Spring Boot (8080) and the Frontend to talk to FastAPI
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8080", "http://localhost:3000"], 
@@ -64,12 +64,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-# --- 3. Request Models ---
+# 3 Request Models 
 class HSCodeRequest(BaseModel):
     product_name: str
     description: str
 
-# --- 4. Engineering Utilities ---
+# 4 Engineering Utilities 
 def clean_json_response(text: str):
     if not text: return "{}"
     cleaned = re.sub(r'```json\s*|```', '', text).strip()
@@ -97,9 +97,8 @@ def create_pdf_multi(data, output_path):
         print(f"🔥 PDF Rendering Error: {e}")
         return False
 
-# ==========================================
+
 # FEATURE 1: Standalone HS Code Suggestion
-# ==========================================
 @app.post("/api/v1/predict-hs-code-rag")
 async def predict_hs_code_rag(request: HSCodeRequest):
     try:
@@ -137,10 +136,7 @@ async def predict_hs_code_rag(request: HSCodeRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ==========================================
 # FEATURE 2: Detailed Invoice Extraction
-# ==========================================
-
 async def extract_invoice_data(file: UploadFile):
     image_bytes = await file.read()
     image = Image.open(io.BytesIO(image_bytes))
@@ -165,17 +161,15 @@ async def extract_invoice_details(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-# ==========================================
 # FEATURE 4: AI Reconciliation Engine
-# ==========================================
 @app.post("/api/v1/validate-two-invoices")
 async def validate_two_invoices(invoice_1: UploadFile = File(...), invoice_2: UploadFile = File(...)):
     try:
-        # 1. Extract data from both (Re-using existing logic)
+        # 1 Extract data from both (Re-using existing logic)
         supplier_data = await extract_invoice_data(invoice_1) 
         internal_data = await extract_invoice_data(invoice_2)
         
-        # 2. AI Comparison Engine
+        # 2 AI Comparison Engine
         comparison_prompt = f"""
         Act as an expert Customs Reconciliation Auditor. 
         Compare these two JSON datasets representing invoices/records:
@@ -207,9 +201,7 @@ async def validate_two_invoices(invoice_1: UploadFile = File(...), invoice_2: Up
         print(f"🔥 Reconciliation Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-# ==========================================
 # FEATURE 3: Multi-Item PDF Generation
-# ==========================================
 @app.post("/api/v1/generate-full-declaration")
 async def generate_full_declaration(files: list[UploadFile] = File(...)):
     try:
@@ -232,13 +224,13 @@ async def generate_full_declaration(files: list[UploadFile] = File(...)):
         
         items_html_rows = ""
 
-        # --- THE CLEAN LOOP ---
+        # --- the clean loop ---
         for item in invoice_data.get("items", []):
             desc = item.get("desc", "Unknown")
             qty = item.get("qty", "1")
             price = item.get("price", "0.0")
             
-            # 1. Labor Check
+            # 1 labor check
             is_service = any(x in desc.lower() for x in ["labor", "service", "work", "hrs", "hours"])
             
             if is_service:
@@ -253,13 +245,13 @@ async def generate_full_declaration(files: list[UploadFile] = File(...)):
                 """
                 continue 
 
-            # 2. RAG Search
+            # 2 RAG Search
             db_res = customs_collection.query(query_texts=[desc], n_results=2)
             context = ""
             for d, m in zip(db_res['documents'][0], db_res['metadatas'][0]):
                 context += f"- Jordan Law: {d} | Code: {m['hs_code']} | Rate: {m['duty_rate']}%\n"
 
-            # 3. AI Classification
+            # 3 AI Classification
             class_prompt = f"""
             Identify 11-digit HS Code for: "{desc}".
             [CONTEXT]: {context}
@@ -268,7 +260,7 @@ async def generate_full_declaration(files: list[UploadFile] = File(...)):
             c_res = generate_content_with_fallback('gemini-2.5-flash', class_prompt)
             c_data = json.loads(clean_json_response(c_res.text))
             
-            # 4. Clean & Build Row
+            # 4  Clean and Build Row
             clean_hs = re.sub(r'[^0-9]', '', str(c_data.get("hs_code", "00000000000")))
             raw_duty = str(c_data.get("duty", "")).strip()
             clean_duty = re.sub(r'[^0-9]', '', raw_duty)
