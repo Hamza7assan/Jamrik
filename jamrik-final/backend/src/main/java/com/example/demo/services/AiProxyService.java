@@ -32,8 +32,8 @@ public class AiProxyService {
 
     // This is the method the Controller was looking for
    public String getHsCode(String productName, String description) {
-        // Hardcoded clean URL to avoid property file typos (Bad authority)
-        String url = "http://127.0.0.1:8000/api/v1/predict-hs-code-rag";
+        // Using injected baseUrl
+        String url = aiServiceBaseUrl + "/api/v1/predict-hs-code-rag";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -56,7 +56,7 @@ public class AiProxyService {
     }
 
     public String forwardFilesToAI(MultipartFile invoice1, MultipartFile invoice2) throws IOException {
-        String url = "http://127.0.0.1:8000/api/v1/validate-two-invoices";
+        String url = aiServiceBaseUrl + "/api/v1/validate-two-invoices";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -96,7 +96,7 @@ public class AiProxyService {
     }
 
     public String generateFullDeclarationProxy(java.util.List<com.example.demo.classes.Document> docs) {
-        String url = "http://127.0.0.1:8000/api/v1/generate-full-declaration";
+        String url = aiServiceBaseUrl + "/api/v1/generate-full-declaration";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -129,7 +129,7 @@ public class AiProxyService {
     }
 
     public String analyzeDocumentsProxy(java.util.List<com.example.demo.classes.Document> docs) {
-        String url = "http://127.0.0.1:8000/api/v1/analyze-shipment-documents";
+        String url = aiServiceBaseUrl + "/api/v1/analyze-shipment-documents";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);

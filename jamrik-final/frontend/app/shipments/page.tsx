@@ -23,7 +23,7 @@ const Shipments = () => {
     useEffect(() => {
         const fetchShipments = async () => {
             try {
-                const response = await jamrikFetch("http://localhost:8080/jamrik/shipments/searchAll", { credentials: "include" }); 
+                const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/searchAll`, { credentials: "include" }); 
                 
                 if (response.ok) {
                     const data = await response.json();
@@ -83,7 +83,7 @@ const Shipments = () => {
 
         const toastId = toast.loading(t("Deleting shipment..."));
         try {
-            const url = `http://localhost:8080/jamrik/shipments/deleteShipment?referenceNumber=${referenceNumber}`;
+            const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/deleteShipment?referenceNumber=${referenceNumber}`;
             
             const response = await jamrikFetch(url, {
                 method: "DELETE",
@@ -119,7 +119,7 @@ const Shipments = () => {
         try {
             // FIXED: Added encodeURIComponent to prevent URL corruption with special characters
             const encodedRef = encodeURIComponent(clickedShipmentData.referenceNumber);
-            const url = `http://localhost:8080/jamrik/shipments/searchAllDocs?referenceNumber=${encodedRef}`;
+            const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/searchAllDocs?referenceNumber=${encodedRef}`;
             
             const response = await jamrikFetch(url, { credentials: "include" });
             
@@ -145,7 +145,7 @@ useEffect(() => {
         if (window.confirm(t("Are you sure you want to delete this document?"))) {
             const toastId = toast.loading(t("Deleting document..."));
             try {
-                const url = `http://localhost:8080/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
+                const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
                 const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
 
                 if (response.ok) {
@@ -199,7 +199,7 @@ useEffect(() => {
 
         const toastId = toast.loading(t("Uploading document..."));
         try {
-            const response = await jamrikFetch(`http://localhost:8080/jamrik/documents/uploadOne/${encodeURIComponent(uploadShipmentReference)}`, {
+            const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/uploadOne/${encodeURIComponent(uploadShipmentReference)}`, {
                 method: "POST",
                 credentials: "include",
                 body: formData,
@@ -244,7 +244,7 @@ const handleAnalyzeDocuments = async () => {
 
     try {
         // 4. Construct URL targeted directly at our new proxy endpoint
-        const url = `http://localhost:8080/api/ai/analyze-documents?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/analyze-documents?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
         
         const response = await jamrikFetch(url, {
             method: "POST", // Using POST since Spring proxy is PostMapping
@@ -332,7 +332,7 @@ const handleGenerateCustomsDeclaration = async () => {
     const toastId = toast.loading(t("Generating customs declaration form..."));
 
     try {
-        const url = `http://localhost:8080/api/ai/generate-declaration?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/generate-declaration?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
         const response = await jamrikFetch(url, {
             method: "POST",
             credentials: "include",
@@ -345,7 +345,7 @@ const handleGenerateCustomsDeclaration = async () => {
 
         const data = await response.json();
         if (data.download_url) {
-            const pdfUrl = `http://localhost:8000${data.download_url}`;
+            const pdfUrl = `${process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000'}${data.download_url}`;
             
             // Fetch the PDF blob from FastAPI
             const pdfResponse = await jamrikFetch(pdfUrl);
@@ -439,7 +439,7 @@ const handleCloseCustomsModal = () => {
               <div key={`${doc.documentName}-${index}`} className="uploadedFileCard">
                 <div style={{display: "flex", flexDirection: "column", alignItems: "flex-start",  padding: "8px 0px 8px 8px"}}>
               <span className="fileNameText">{doc.documentType || "Document"}:</span>
-              <a href={`http://localhost:8080/jamrik/documents/view/${doc.id}`} target="_blank" rel="noopener noreferrer" style={{color: "#1C398E", textDecoration: "underline", marginLeft: "4px"}}>
+              <a href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/view/${doc.id}`} target="_blank" rel="noopener noreferrer" style={{color: "#1C398E", textDecoration: "underline", marginLeft: "4px"}}>
                   {doc.documentName}
               </a>
                 </div>

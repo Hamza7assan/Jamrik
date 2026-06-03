@@ -12,7 +12,7 @@ const filesToUpdate = [
 ];
 
 filesToUpdate.forEach(file => {
-    const filePath = path.join('C:/Users/DELL/OneDrive - just.edu.jo/Desktop/Jamrik/jamrik-final/frontend', file);
+    const filePath = path.join(__dirname, file);
     if (!fs.existsSync(filePath)) { console.log('Not found:', filePath); return; }
     let content = fs.readFileSync(filePath, 'utf8');
     

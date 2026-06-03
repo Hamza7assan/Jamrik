@@ -109,7 +109,7 @@ const handleSubmit2 = async (e: React.FormEvent) => {
 
     const toastId = toast.loading(t("Creating shipment..."));
     try {
-        const response = await jamrikFetch(`http://localhost:8080/jamrik/shipments/newShipment`, {
+        const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/newShipment`, {
             method: "POST",
             credentials: "include",
             headers: {
@@ -162,7 +162,7 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
             return true;
         }
 
-        const url = `http://localhost:8080/jamrik/documents/upload/${encodeURIComponent(shipmentId)}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/upload/${encodeURIComponent(shipmentId)}`;
 
         const formData = new FormData();
         const metadata: { name: string; type: string }[] = [];
@@ -203,7 +203,7 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
 const triggerPdfGeneration = async (referenceNumber: string) => {
     const toastId = toast.loading(t("Generating Customs Declaration PDF..."));
     try {
-        const response = await jamrikFetch(`http://localhost:8080/jamrik/shipments/generateCustomsDeclaration?referenceNumber=${referenceNumber}`, {
+        const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/generateCustomsDeclaration?referenceNumber=${referenceNumber}`, {
             method: "POST",
             credentials: "include"
         });

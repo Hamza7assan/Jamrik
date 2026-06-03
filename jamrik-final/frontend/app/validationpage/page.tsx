@@ -95,7 +95,7 @@ const handleValidate = async () => {
 
         try {
             // 4. API Request to Spring Boot Endpoint (Proxy)
-            const response = await jamrikFetch("http://localhost:8080/api/ai/validate-two-invoices", {
+            const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/validate-two-invoices`, {
                 method: "POST",
                 credentials: "include",
                 body: formData

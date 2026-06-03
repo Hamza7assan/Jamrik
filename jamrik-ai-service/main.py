@@ -50,7 +50,8 @@ def generate_content_with_fallback(model_name: str, contents):
     raise HTTPException(status_code=503, detail="All AI providers are currently overloaded. Please try again later.")
 
 # 2 Vector Database Connection ---
-chroma_client = chromadb.PersistentClient(path="./jamrik_vectordb")
+db_path = os.getenv("VECTOR_DB_PATH", "./jamrik_vectordb")
+chroma_client = chromadb.PersistentClient(path=db_path)
 customs_collection = chroma_client.get_or_create_collection(name="jordanian_customs_laws")
 
 app = FastAPI(title="JAMRIK AI Customs Engine - Master Build v4.5.1")
@@ -59,7 +60,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Allow Spring Boot (8080) and the Frontend to talk to FastAPI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8080", "http://localhost:3000"], 
+    allow_origins=os.getenv("CORS_ORIGINS", "http://localhost:8080,http://localhost:3000").split(","),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -31,7 +31,7 @@ const HsCodeAssistant = () => {
         const toastId = toast.loading(t("Finding HS Code..."));
         try {
             // 1. The new URL for your AI Proxy
-            const url = `http://localhost:8080/api/ai/predict-hs-code`;
+            const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/predict-hs-code`;
             
             // 2. The data will be sent in the request body, so we format it as an object
             const requestBody = {

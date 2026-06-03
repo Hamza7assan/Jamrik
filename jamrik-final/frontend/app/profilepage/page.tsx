@@ -37,7 +37,7 @@ const handleLogOut = async () => {
     const toastId = toast.loading(t("Logging out..."));
     try {
         toast.loading(t("Logging out..."), { id: toastId });
-        const response = await jamrikFetch("http://localhost:8080/jamrik/logout", {
+        const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/logout`, {
             method: "POST",
             credentials: "include"
         });
@@ -58,7 +58,7 @@ const handleSaveChanges = async () => {
     const toastId = toast.loading(t("Saving changes..."));
     try {
         toast.loading(t("Saving changes..."), { id: toastId });
-        const url = `http://localhost:8080/jamrik/changeData/${encodeURIComponent(userName)}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/changeData/${encodeURIComponent(userName)}`;
         const response = await jamrikFetch(url, {
             method: "PUT",
             credentials: "include",

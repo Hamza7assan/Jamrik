@@ -56,7 +56,7 @@ const LogInPage = () => {
             urlEncodedData.append("username", currentUsername);
             urlEncodedData.append("password", currentPassword);
             
-            const response = await fetch("http://localhost:8080/jamrik/login", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/login`, {
                 method: "POST",
                 credentials: "include",
                 headers: {

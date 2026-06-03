@@ -47,7 +47,7 @@ const ChangePasswordPage = () => {
         }else{
         const toastId = toast.loading(t("Changing password..."));
         try {
-            const url = `http://localhost:8080/jamrik/changePassword/${encodeURIComponent(userName)}`;
+            const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/changePassword/${encodeURIComponent(userName)}`;
             const response = await jamrikFetch(url, {
                 method: "PUT",
                 credentials: "include",

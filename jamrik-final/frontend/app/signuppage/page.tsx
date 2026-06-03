@@ -51,7 +51,7 @@ const SignUpPage = () => {
     const toastId = toast.loading(t("Creating account..."));
     try {
         toast.loading(t("Creating account..."), { id: toastId });
-            const response = await fetch("http://localhost:8080/jamrik/register", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/register`, {
                 method: "POST",
                 credentials: "include",
                 headers: {
