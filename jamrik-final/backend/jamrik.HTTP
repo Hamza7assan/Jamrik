@@ -23,4 +23,4 @@ GET http://localhost:8080/jamrik/hs?productName=Table%20Salt&description=Iodized
 GET http://localhost:8080/jamrik/hs?productName=Apple&description=Fresh red fruit
 
 ### Test HS Code for Horse (English)
-GET http://localhost:8080/jamrik/hs?productName=Horse&description=Pure Bred Horse
+GET http://localhost:8080/jamrik/hs?productName=Horse&description=Pure Bred Horse 
