@@ -67,3 +67,11 @@ jobs:
           file: ./jamrik-final/frontend/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/jamrik_frontend:latest
+
+      - name: Build and Push AI Engine Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./jamrik-ai-service
+          file: ./jamrik-ai-service/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/jamrik_ai_engine:latest    

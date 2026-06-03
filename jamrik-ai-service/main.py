@@ -169,7 +169,7 @@ async def validate_two_invoices(invoice_1: UploadFile = File(...), invoice_2: Up
         supplier_data = await extract_invoice_data(invoice_1) 
         internal_data = await extract_invoice_data(invoice_2)
         
-        # 2 AI Comparison Engine
+       # 2 AI Comparison Engine
         comparison_prompt = f"""
         Act as an expert Customs Reconciliation Auditor. 
         Compare these two JSON datasets representing invoices/records:
@@ -178,18 +178,18 @@ async def validate_two_invoices(invoice_1: UploadFile = File(...), invoice_2: Up
 
         Task:
         1. Soft-match items by description (handle naming variations/synonyms).
-        2. Compare unit prices, quantities, and totals for matched items.
-        3. Detect discrepancies in Supplier Name, Total Amount, or unmatched items.
+        2. Compare unit prices, quantities, and totals for matched items ONLY IF BOTH datasets contain a value for that field.
+        3. CRITICAL RULE FOR NULLS: If a field (like price, currency, or total) exists in one dataset but is missing, empty, or 'null' in the other, IGNORE IT. Do NOT report it as a mismatch. A missing field is acceptable and does not constitute a conflict.
+        4. Detect actual discrepancies: ONLY report a "Mismatch" if a field has conflicting actual values in both datasets (e.g., Quantity is 100 vs 90), or if an item completely fails to soft-match.
 
         Return ONLY a strict JSON structure:
         {{
            "discrepancies": [
-              {{"field": "string (e.g., 'Total Amount', 'Quantity - Laptop')", "status": "Match" or "Mismatch", "message": "Detailed explanation of the difference or confirmation of match"}}
+              {{"field": "string (e.g., 'Total Amount', 'Quantity - Laptop')", "status": "Match" or "Mismatch", "message": "Detailed explanation of the explicit conflict or confirmation of match"}}
            ]
         }}
         Do not include any other text, markdown formatting, or explanation outside the JSON.
         """
-        
         response = generate_content_with_fallback('gemini-2.5-flash', comparison_prompt)
         result = json.loads(clean_json_response(response.text))
         
