@@ -2,7 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from main import app, clean_json_response
 
-# Initialize a mock test client to test the API endpoints without starting the actual server
+#  mock test client to test the API endpoints
 client = TestClient(app)
 
 def test_health_check():
