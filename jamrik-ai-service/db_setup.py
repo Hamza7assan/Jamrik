@@ -10,13 +10,13 @@ try:
 except Exception:
     pass
 
-# Create a new collection 
+#  Create new collection 
 collection = client.create_collection(name="jordanian_customs_laws")
 
 print("Reading 7000+ rows from CSV and converting to Vectors...")
 
 csv_file_path = "customs_data.csv"
-batch_size = 1000 # Batch processing to protect RAM usage
+batch_size = 1000 # batch processing to protect ram usage
 
 ids_batch = []
 documents_batch = []
@@ -26,7 +26,7 @@ try:
     # 'utf-8-sig' handles potential Arabic encoding issues from Excel CSV exports
     with open(csv_file_path, mode='r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
-        next(reader) # Skip the column headers (HS Code, Item, Duty Rate)
+        next(reader) # skip the column headers (HS Code, Item, Duty Rate)
 
         count = 0
         for row in reader:
@@ -47,7 +47,7 @@ try:
             
             count += 1
             
-            # Inject data into the database every 1000 rows
+            # Inject data into the database every 1000 rows.....yy=
             if len(ids_batch) == batch_size:
                 collection.add(ids=ids_batch, documents=documents_batch, metadatas=metadatas_batch)
                 print(f"✅ Successfully inserted {count} rows...")
@@ -55,7 +55,7 @@ try:
                 documents_batch.clear()
                 metadatas_batch.clear()
 
-        # Inject the final remaining batch
+        # inject the final remaining batch
         if len(ids_batch) > 0:
             collection.add(ids=ids_batch, documents=documents_batch, metadatas=metadatas_batch)
             print(f"✅ Successfully inserted the final batch. Total rows: {count}")
