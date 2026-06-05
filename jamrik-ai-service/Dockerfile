@@ -1,7 +1,7 @@
 # Use a lightweight Python image
 FROM python:3.10-slim
 
-# NEW: Install system dependencies required for PDF generation (pycairo/xhtml2pdf)
+# Install system dependencies required for PDF generation (pycairo/xhtml2pdf)
 RUN apt-get update && apt-get install -y \
     gcc \
     pkg-config \
