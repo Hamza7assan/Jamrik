@@ -57,14 +57,14 @@ const DashBoard = () => {
                         <p className="dashboardFeatureExplanationCardsTitle">{t("Features Explanation")}</p>
                         <div className="featureExplanationCardsContainer">
                            {featuresExplanation.map((feature, index) => (
-    <React.Fragment key={index}>
-        <div onClick={() => {setFeatureExplanationPressed(true); setExplanationDataNeeded(feature);}}>
-            <p className="featureExplanationTitle">{feature.title}</p>
-            <Image src={feature.iconSrc} alt={feature.title} width={24} height={24} />
-        </div>
-        <hr />
-    </React.Fragment>
-))}
+                          <React.Fragment key={index}>
+                          <div onClick={() => {setFeatureExplanationPressed(!featureExplanationPressed); setExplanationDataNeeded(feature)}} key={index} className="featureExplanationItemCard">
+                           <p className="featureExplanationTitle">{feature.title}</p>
+                           <Image src={feature.iconSrc} alt={feature.title} width={24} height={24} />
+                            </div>
+                           <hr />
+                       </React.Fragment>
+                          ))}
 
                         </div>
                     </div>
