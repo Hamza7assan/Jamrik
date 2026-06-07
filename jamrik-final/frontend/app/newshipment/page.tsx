@@ -49,8 +49,8 @@ const NewShipment = () => {
       }
       
       const fileName = selectedFile.name.toLowerCase();
-      if (!fileName.endsWith(".pdf") && !fileName.endsWith(".doc") && !fileName.endsWith(".docx") && !fileName.endsWith(".png") && !fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg")) {
-          toast.error(t("Please upload PDF, Word, or Image files only"));
+      if (!fileName.endsWith(".pdf")) {
+          toast.error(t("Please upload PDF files only"));
           e.target.value = "";
           return;
       }
@@ -260,7 +260,7 @@ const triggerPdfGeneration = async (referenceNumber: string) => {
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+        accept=".pdf"
         style={{ display: 'none' }}
       />
 
@@ -291,40 +291,52 @@ const triggerPdfGeneration = async (referenceNumber: string) => {
      {t("Create Shipment")}
       </button>
 
-      <div className="createShipmentPopUpOverlay" style={{display: createShipmentPressed ? "flex" : "none"}}>
-      <div className="createShipmentPopUp" style={{display:"flex"}}>
-        <div>
-        <LogInInputs onValueChange={handleDataChange} ref={shipmentNameRef} label={t("Shipment Name")} iconSrc="/icons/mailicon.png" iconName="mail icon" inputType="text" inputName="shipmentName" placeholder={t("Example Shipment")} />
-        <LogInInputs onValueChange={handleDataChange} ref={shipmentReferenceNumberRef} label={t("Shipment Reference Number")} iconSrc="/icons/mailicon.png" iconName="mail icon" inputType="text" inputName="shipmentReferenceNumber" placeholder="ORGD9678383" />
-        </div>
+      {createShipmentPressed && (
+      <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
+        <div style={{ backgroundColor: "#FFFFFF", padding: "24px", borderRadius: "10px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0px 4px 6px rgba(0,0,0,0.1)" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "600", color: "#1C398E", margin: 0 }}>{t("Create New Shipment")}</h2>
+          
+          <input 
+              type="text" 
+              placeholder={t("Shipment Name")} 
+              ref={shipmentNameRef} 
+              onChange={handleDataChange}
+              style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc", width: "100%" }}
+          />
+          <input 
+              type="text" 
+              placeholder={t("Shipment Reference Number")} 
+              ref={shipmentReferenceNumberRef} 
+              onChange={handleDataChange}
+              style={{ padding: "10px", borderRadius: "5px", border: "1px solid #ccc", width: "100%" }}
+          />
 
-        <div className="shipmentStatusOptions" ref={shipmentStatusRef} onChange={handleDataChange} style={{display: "flex",marginTop: "20px",gap: "24px", fontSize: "18px"}}>
-        <div style={{display: "flex",gap:"8px"}}>
-        <label htmlFor="inProgressStatus" className="shipmentDataOption" >{t("In Progress")}</label>
-        <input type="radio" id="inProgressStatus" name="shipmentStatusGroup" value="In Progress" defaultChecked />
-        </div>
+          <div className="shipmentStatusOptions" ref={shipmentStatusRef} onChange={handleDataChange} style={{display: "flex",marginTop: "4px",gap: "24px", fontSize: "16px"}}>
+              <div style={{display: "flex",gap:"8px", alignItems: "center"}}>
+                  <input type="radio" id="inProgressStatus" name="shipmentStatusGroup" value="In Progress" defaultChecked />
+                  <label htmlFor="inProgressStatus" className="shipmentDataOption" style={{ margin: 0 }}>{t("In Progress")}</label>
+              </div>
+              <div style={{display: "flex",gap:"8px", alignItems: "center"}}>
+                  <input type="radio" id="doneStatus" name="shipmentStatusGroup" value="Done" />
+                  <label htmlFor="doneStatus" className="shipmentDataOption" style={{ margin: 0 }}>{t("Done")}</label>
+              </div>
+          </div>
 
-         <div style={{display: "flex",gap:"8px"}}>
-        <label htmlFor="doneStatus" className="shipmentDataOption" >{t("Done")}</label>
-        <input type="radio" id="doneStatus" name="shipmentStatusGroup" value="Done" />
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "10px" }}>
+              <button 
+                  style={{ padding: "10px 20px", backgroundColor: "#ccc", color: "#333", borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: "bold" }}
+                  onClick={() => setCreateShipmentPressed(false)}>
+                  {t("Cancel")}
+              </button>
+              <button 
+                  style={{ padding: "10px 20px", backgroundColor: "#1C398E", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: "bold" }}
+                  onClick={handleSubmit2}>
+                  {t("Create Shipment")}
+              </button>
+          </div>
         </div>
       </div>
-      <div style={{marginTop:"20px",display: "flex", gap: "12px",flexDirection: "row", justifyContent: "flex-end"}}>
-      <button 
-      style={{padding:"8px 16px",backgroundColor:"#ad0000"}}
-     className="createShipmentBtn"
-     onClick={() => setCreateShipmentPressed(false)}>
-     {t("Cancel Shipment")}
-      </button>
-      <button 
-      style={{padding:"8px 16px",backgroundColor:"green"}}
-     className="createShipmentBtn"
-     onClick={handleSubmit2}>
-     {t("Create Shipment")}
-      </button>
-      </div>
-      </div>
-      </div>
+      )}
 
       </div>
 

@@ -57,6 +57,13 @@ const ValidationPage = () => {
     const files = e.target.files;
     if (files && files.length > 0 && activeIndex !== null) {
         const selectedFile = files[0];
+        const fileName = selectedFile.name.toLowerCase();
+        if (!fileName.endsWith(".pdf")) {
+            toast.error(t("Please upload PDF files only"));
+            e.target.value = "";
+            return;
+        }
+        
         setFilesData(prev => {
             const newFilesData = [...prev];
             newFilesData[activeIndex] = {
@@ -156,7 +163,7 @@ const handleValidate = async () => {
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept=".pdf,.doc,.docx,.xls,.xlsx, image/png, image/jpeg, image/jpg"
+        accept=".pdf"
         style={{ display: 'none' }}
       />
 

@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, UploadFile, File
 from pydantic import BaseModel
 from google import genai
+from google.genai import types
 from xhtml2pdf import pisa
 from fastapi.responses import FileResponse
 import logging
@@ -139,8 +140,7 @@ async def predict_hs_code_rag(request: HSCodeRequest):
 
 # FEATURE 2: Detailed Invoice Extraction
 async def extract_invoice_data(file: UploadFile):
-    image_bytes = await file.read()
-    image = Image.open(io.BytesIO(image_bytes))
+    file_bytes = await file.read()
     
     prompt = """
     Extract ALL details from this invoice. 
@@ -152,7 +152,8 @@ async def extract_invoice_data(file: UploadFile):
       "items": [{"description": "string", "qty": "string", "unit_price": "string", "total": "string"}]
     }
     """
-    response = generate_content_with_fallback('gemini-2.5-flash', [prompt, image])
+    pdf_part = types.Part.from_bytes(data=file_bytes, mime_type='application/pdf')
+    response = generate_content_with_fallback('gemini-2.5-flash', [prompt, pdf_part])
     return json.loads(clean_json_response(response.text))
 
 @app.post("/api/v1/extract-invoice-details")
@@ -216,9 +217,8 @@ async def generate_full_declaration(files: list[UploadFile] = File(...)):
         contents = [invoice_prompt]
         
         for file in files:
-            image_bytes = await file.read()
-            image = Image.open(io.BytesIO(image_bytes))
-            contents.append(image)
+            file_bytes = await file.read()
+            contents.append(types.Part.from_bytes(data=file_bytes, mime_type='application/pdf'))
             
         res = generate_content_with_fallback('gemini-2.5-flash', contents)
         invoice_data = json.loads(clean_json_response(res.text))
@@ -324,9 +324,8 @@ async def analyze_shipment_documents(files: list[UploadFile] = File(...)):
         contents = [audit_prompt]
         
         for file in files:
-            image_bytes = await file.read()
-            image = Image.open(io.BytesIO(image_bytes))
-            contents.append(image)
+            file_bytes = await file.read()
+            contents.append(types.Part.from_bytes(data=file_bytes, mime_type='application/pdf'))
             
         res = generate_content_with_fallback('gemini-2.5-flash', contents)
         

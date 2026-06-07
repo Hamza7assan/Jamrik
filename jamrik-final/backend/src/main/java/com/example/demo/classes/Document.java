@@ -27,9 +27,7 @@ public class Document {
     
     private String contentType;
 
-    @JsonIgnore
-    @Lob
-    private byte[] fileData;
+    private String documentPublicId;
     public Document(String documentName, String documentType, Shipment shipment) {
         this.documentName=documentName;
         this.documentType=documentType;

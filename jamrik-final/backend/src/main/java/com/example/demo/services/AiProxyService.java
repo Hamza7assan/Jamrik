@@ -104,14 +104,21 @@ public class AiProxyService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
         for (com.example.demo.classes.Document doc : docs) {
-            if (doc.getFileData() != null) {
-                ByteArrayResource fileResource = new ByteArrayResource(doc.getFileData()) {
-                    @Override
-                    public String getFilename() {
-                        return doc.getDocumentName() != null ? doc.getDocumentName() : "file.pdf";
+            if (doc.getDocumentUrl() != null) {
+                try {
+                    byte[] fileData = restTemplate.getForObject(doc.getDocumentUrl(), byte[].class);
+                    if (fileData != null) {
+                        ByteArrayResource fileResource = new ByteArrayResource(fileData) {
+                            @Override
+                            public String getFilename() {
+                                return doc.getDocumentName() != null ? doc.getDocumentName() : "file.pdf";
+                            }
+                        };
+                        body.add("files", fileResource);
                     }
-                };
-                body.add("files", fileResource);
+                } catch (Exception e) {
+                    System.err.println("Failed to download file from Cloudinary for AI proxy: " + e.getMessage());
+                }
             }
         }
 
@@ -137,14 +144,21 @@ public class AiProxyService {
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
 
         for (com.example.demo.classes.Document doc : docs) {
-            if (doc.getFileData() != null) {
-                ByteArrayResource fileResource = new ByteArrayResource(doc.getFileData()) {
-                    @Override
-                    public String getFilename() {
-                        return doc.getDocumentName() != null ? doc.getDocumentName() : "file.pdf";
+            if (doc.getDocumentUrl() != null) {
+                try {
+                    byte[] fileData = restTemplate.getForObject(doc.getDocumentUrl(), byte[].class);
+                    if (fileData != null) {
+                        ByteArrayResource fileResource = new ByteArrayResource(fileData) {
+                            @Override
+                            public String getFilename() {
+                                return doc.getDocumentName() != null ? doc.getDocumentName() : "file.pdf";
+                            }
+                        };
+                        body.add("files", fileResource);
                     }
-                };
-                body.add("files", fileResource);
+                } catch (Exception e) {
+                    System.err.println("Failed to download file from Cloudinary for AI proxy: " + e.getMessage());
+                }
             }
         }
 

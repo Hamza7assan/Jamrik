@@ -59,7 +59,7 @@ public class DocumentController {
     }
 
     @GetMapping("/view/{id}")
-    public ResponseEntity<byte[]> viewDocument(@PathVariable Long id) {
+    public ResponseEntity<?> viewDocument(@PathVariable Long id) {
         return documentService.viewDocument(id);
     }
 }

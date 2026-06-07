@@ -142,24 +142,33 @@ useEffect(() => {
 }, [clickedShipmentData?.referenceNumber]);
 
     const handleDeleteDocument = async (documentName: string) => {
-        if (window.confirm(t("Are you sure you want to delete this document?"))) {
-            const toastId = toast.loading(t("Deleting document..."));
-            try {
-                const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
-                const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
+        toast(t("Are you sure you want to delete this document?"), {
+            action: {
+                label: t("Delete"),
+                onClick: async () => {
+                    const toastId = toast.loading(t("Deleting document..."));
+                    try {
+                        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
+                        const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
 
-                if (response.ok) {
-                    setAllDocuments(prev => prev.filter(doc => doc.documentName !== documentName));
-                    toast.success(t("Document deleted successfully."), { id: toastId });
-                } else {
-                    const error = await response.text();
-                    toast.error(t("Delete failed: ") + error, { id: toastId });
+                        if (response.ok) {
+                            setAllDocuments(prev => prev.filter(doc => doc.documentName !== documentName));
+                            toast.success(t("Document deleted successfully."), { id: toastId });
+                        } else {
+                            const error = await response.text();
+                            toast.error(t("Delete failed: ") + error, { id: toastId });
+                        }
+                    } catch (error) {
+                        console.error("Connection error:", error);
+                        toast.error(t("Could not connect to the server."), { id: toastId });
+                    }
                 }
-            } catch (error) {
-                console.error("Connection error:", error);
-                toast.error(t("Could not connect to the server."), { id: toastId });
+            },
+            cancel: {
+                label: t("Cancel"),
+                onClick: () => {}
             }
-        }
+        });
     };
     // Modal States
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -186,9 +195,8 @@ useEffect(() => {
             return;
         }
         const fileName = uploadFile.name.toLowerCase();
-        if (!fileName.endsWith(".pdf") && !fileName.endsWith(".doc") && !fileName.endsWith(".docx")
-            && !fileName.endsWith(".png") && !fileName.endsWith(".jpg") && !fileName.endsWith(".jpeg")) {
-            toast.error(t("Please upload PDF, Word, or Image files only"));
+        if (!fileName.endsWith(".pdf")) {
+            toast.error(t("Please upload PDF files only"));
             return;
         }
 
@@ -497,7 +505,7 @@ const handleCloseCustomsModal = () => {
                     </select>
                     <input 
                         type="file" 
-                        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+                        accept=".pdf"
                         onChange={(e) => setUploadFile(e.target.files ? e.target.files[0] : null)}
                         style={{ width: "100%" }}
                     />

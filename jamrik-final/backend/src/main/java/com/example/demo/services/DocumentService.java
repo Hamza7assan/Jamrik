@@ -8,9 +8,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 //this class handles the document upload, data extraction, and passing to AI
@@ -22,12 +26,15 @@ public class DocumentService {
     private final ShipmentRepository shipmentRepo;
     //bean from doc AI service to handle doc processing
     private final HSCodeAIService aiService;
+    private final Cloudinary cloudinary;
     public DocumentService(DocumentRepository documentRepo,
                            ShipmentRepository shipmentRepo,
-                           HSCodeAIService  aiService) {
+                           HSCodeAIService  aiService,
+                           Cloudinary cloudinary) {
         this.documentRepo=documentRepo;
         this.shipmentRepo=shipmentRepo;
         this.aiService=aiService;
+        this.cloudinary=cloudinary;
     }
     //this method receives the document with its shipment id
     @Transactional
@@ -47,9 +54,8 @@ public class DocumentService {
             String originalFilename = file.getOriginalFilename();
             if (originalFilename != null) {
                 String lower = originalFilename.toLowerCase();
-                if (!lower.endsWith(".pdf") && !lower.endsWith(".doc") && !lower.endsWith(".docx") 
-                    && !lower.endsWith(".png") && !lower.endsWith(".jpg") && !lower.endsWith(".jpeg")) {
-                    return ResponseEntity.status(400).body("Please upload PDF, Word, or Image files only");
+                if (!lower.endsWith(".pdf")) {
+                    return ResponseEntity.status(400).body("Please upload PDF files only");
                 }
             }
             if (file.getSize() > 10 * 1024 * 1024) {
@@ -78,10 +84,12 @@ public class DocumentService {
                 //save the content of the doc in the db table
                 document.setContent(rawText);
                 try {
-                    document.setFileData(file.getBytes());
+                    Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+                    document.setDocumentUrl(uploadResult.get("secure_url").toString());
+                    document.setDocumentPublicId(uploadResult.get("public_id").toString());
                     document.setContentType(file.getContentType());
                 } catch (IOException e) {
-                    System.err.println("Failed to read file bytes");
+                    System.err.println("Failed to upload file to Cloudinary: " + e.getMessage());
                 }
                 //save the new document in the document table
                 documentRepo.save(document);
@@ -104,6 +112,13 @@ public class DocumentService {
      public void deleteDocument(String referenceNumber,String documentName){
         Document document=documentRepo.findByDocumentName(referenceNumber,documentName)
                 .orElseThrow(()->new RuntimeException("Document not found"));
+        try {
+            if (document.getDocumentPublicId() != null) {
+                cloudinary.uploader().destroy(document.getDocumentPublicId(), ObjectUtils.emptyMap());
+            }
+        } catch (IOException e) {
+            System.err.println("Failed to delete file from Cloudinary: " + e.getMessage());
+        }
         Shipment shipment=document.getShipment();
         if(shipment!=null)
             shipment.deleteDocument(document);
@@ -121,9 +136,8 @@ public class DocumentService {
          String originalFilename = file.getOriginalFilename();
          if (originalFilename != null) {
              String lower = originalFilename.toLowerCase();
-             if (!lower.endsWith(".pdf") && !lower.endsWith(".doc") && !lower.endsWith(".docx")
-                 && !lower.endsWith(".png") && !lower.endsWith(".jpg") && !lower.endsWith(".jpeg")) {
-                 return ResponseEntity.status(400).body("Please upload PDF, Word, or Image files only");
+             if (!lower.endsWith(".pdf")) {
+                 return ResponseEntity.status(400).body("Please upload PDF files only");
              }
          }
          if (file.getSize() > 10 * 1024 * 1024) {
@@ -150,10 +164,12 @@ public class DocumentService {
          //save the content of the doc in the db table
          document.setContent(rawText);
          try {
-             document.setFileData(file.getBytes());
+             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+             document.setDocumentUrl(uploadResult.get("secure_url").toString());
+             document.setDocumentPublicId(uploadResult.get("public_id").toString());
              document.setContentType(file.getContentType());
          } catch (IOException e) {
-             System.err.println("Failed to read file bytes");
+             System.err.println("Failed to upload file to Cloudinary: " + e.getMessage());
          }
          //store the new document in the list of documents in the shipment class
          shipment.addDocument(document);
@@ -162,11 +178,13 @@ public class DocumentService {
         return ResponseEntity.ok("upload successful");
      }
 
-     public ResponseEntity<byte[]> viewDocument(Long id) {
+     public ResponseEntity<?> viewDocument(Long id) {
          Document doc = documentRepo.findById(id).orElseThrow(() -> new RuntimeException("Document not found"));
-         return ResponseEntity.ok()
-                 .contentType(org.springframework.http.MediaType.parseMediaType(doc.getContentType() != null ? doc.getContentType() : "application/pdf"))
-                 .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + doc.getDocumentName() + "\"")
-                 .body(doc.getFileData());
+         if (doc.getDocumentUrl() != null) {
+             return ResponseEntity.status(org.springframework.http.HttpStatus.FOUND)
+                     .location(URI.create(doc.getDocumentUrl()))
+                     .build();
+         }
+         return ResponseEntity.notFound().build();
      }
 }
