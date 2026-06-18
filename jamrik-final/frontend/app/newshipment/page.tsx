@@ -167,7 +167,6 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
         const formData = new FormData();
         const metadata: { name: string; type: string }[] = [];
 
-        // Append each file under the single key 'files' and build metadata array
         Object.entries(documents).forEach(([docType, fileArray]) => {
           if (Array.isArray(fileArray)) {
             fileArray.forEach((file) => {
@@ -177,14 +176,12 @@ const handleFileUploadsForCreatingShipment = async (documents: UploadedDocs, shi
           }
         });
 
-        // Attach metadata as a stringified JSON array
         formData.append("metadata", JSON.stringify(metadata));
 
-        // Send the request without setting manual Content-Type headers
         const response = await jamrikFetch(url, {
           method: "POST",
           credentials: "include",
-          body: formData, // Browser handles boundaries automatically
+          body: formData, 
         });
 
         if (!response.ok) {

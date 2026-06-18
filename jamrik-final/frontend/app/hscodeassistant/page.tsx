@@ -30,32 +30,28 @@ const HsCodeAssistant = () => {
     if (productName !== "" && productDescription !== "") {
         const toastId = toast.loading(t("Finding HS Code..."));
         try {
-            // 1. The new URL for your AI Proxy
             const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/predict-hs-code`;
             
-            // 2. The data will be sent in the request body, so we format it as an object
             const requestBody = {
                 product_name: productName,
                 description: productDescription
             };
 
             const response = await jamrikFetch(url, {
-                method: "POST", // 3. The request method must be POST
+                method: "POST", 
                 credentials: "omit", // Omit credentials to avoid potential CORS issues
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(requestBody) // 4. Attach the payload as JSON
+                body: JSON.stringify(requestBody) 
             });
 
             if (response.ok) {
-                // Extract the HS Code from the returned result
                 const data = await response.json(); 
                 setHsCodeResult(data.suggested_hs_code || "N/A");
                 setHsCodeResultSection("block");
                 toast.success(t("HS Code generated successfully!"), { id: toastId });
             } else {
-                // Safely extract the JSON error message
                 const errorData = await response.json().catch(() => ({}));
                 const errorMessage = errorData.error || errorData.detail || "Could not generate HS code.";
                 console.error("Failed to fetch HS Code:", errorMessage);

@@ -82,26 +82,21 @@ const [displayAiResult, setDisplayAiResult] = useState(false);
 const [aiValidationResult, setAiValidationResult] = useState<any[]>([]);
 
 const handleValidate = async () => {
-        // 1. Validation Check
         if (filesData[0].file === null || filesData[1].file === null || filesData[0].docType === "" || filesData[1].docType === "") {
             toast.error(t("Please upload both documents and select their types."));
             return;
         }
 
-        // 2. Clear previous results and show a clean processing spinner
         setDisplayAiResult(false);
         setAiValidationResult([]);
         
         const toastId = toast.loading(t("AI is validating the documents..."));
 
-        // 3. Assemble Multipart Payload
         const formData = new FormData();
-        // Backend expects specific part names 'invoice_1' and 'invoice_2' for FastAPI
         formData.append("invoice_1", filesData[0].file);
         formData.append("invoice_2", filesData[1].file);
 
         try {
-            // 4. API Request to Spring Boot Endpoint (Proxy)
             const response = await jamrikFetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/validate-two-invoices`, {
                 method: "POST",
                 credentials: "include",
@@ -117,7 +112,6 @@ const handleValidate = async () => {
                 return;
             }
             
-            // 5. Update Local State UI
             setAiValidationResult(data.discrepancies || []);
             setDisplayAiResult(true);
 

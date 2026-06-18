@@ -117,7 +117,6 @@ const Shipments = () => {
     const fetchDocuments = async () => {
         if (!clickedShipmentData?.referenceNumber || clickedShipmentData.referenceNumber === "shipment reference number") return;
         try {
-            // FIXED: Added encodeURIComponent to prevent URL corruption with special characters
             const encodedRef = encodeURIComponent(clickedShipmentData.referenceNumber);
             const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/shipments/searchAllDocs?referenceNumber=${encodedRef}`;
             
@@ -141,36 +140,37 @@ useEffect(() => {
     fetchDocuments();
 }, [clickedShipmentData?.referenceNumber]);
 
-    const handleDeleteDocument = async (documentName: string) => {
-        toast(t("Are you sure you want to delete this document?"), {
-            action: {
-                label: t("Delete"),
-                onClick: async () => {
-                    const toastId = toast.loading(t("Deleting document..."));
-                    try {
-                        const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
-                        const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
+    const [deleteDocumentModalOpen, setDeleteDocumentModalOpen] = useState(false);
+    const [documentToDelete, setDocumentToDelete] = useState<string | null>(null);
 
-                        if (response.ok) {
-                            setAllDocuments(prev => prev.filter(doc => doc.documentName !== documentName));
-                            toast.success(t("Document deleted successfully."), { id: toastId });
-                        } else {
-                            const error = await response.text();
-                            toast.error(t("Delete failed: ") + error, { id: toastId });
-                        }
-                    } catch (error) {
-                        console.error("Connection error:", error);
-                        toast.error(t("Could not connect to the server."), { id: toastId });
-                    }
-                }
-            },
-            cancel: {
-                label: t("Cancel"),
-                onClick: () => {}
-            }
-        });
+    const confirmDeleteDocument = (documentName: string) => {
+        setDocumentToDelete(documentName);
+        setDeleteDocumentModalOpen(true);
     };
-    // Modal States
+
+    const handleDeleteDocument = async () => {
+        if (!documentToDelete) return;
+        const documentName = documentToDelete;
+        setDeleteDocumentModalOpen(false);
+        setDocumentToDelete(null);
+
+        const toastId = toast.loading(t("Deleting document..."));
+        try {
+            const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/jamrik/documents/delete/${encodeURIComponent(clickedShipmentData.referenceNumber)}?documentName=${encodeURIComponent(documentName)}`;
+            const response = await jamrikFetch(url, { method: "DELETE", credentials: "include" });
+
+            if (response.ok) {
+                setAllDocuments(prev => prev.filter(doc => doc.documentName !== documentName));
+                toast.success(t("Document deleted successfully."), { id: toastId });
+            } else {
+                const error = await response.text();
+                toast.error(t("Delete failed: ") + error, { id: toastId });
+            }
+        } catch (error) {
+            console.error("Connection error:", error);
+            toast.error(t("Could not connect to the server."), { id: toastId });
+        }
+    };
     const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
     const [uploadShipmentReference, setUploadShipmentReference] = useState("");
     const [uploadFileName, setUploadFileName] = useState("");
@@ -226,36 +226,31 @@ useEffect(() => {
     };
 const [aiResultContent, setAiResultContent] = useState<any>(null);
 
-// Customs Declaration Form states
 const [isGeneratingCustoms, setIsGeneratingCustoms] = useState(false);
 const [customsPdfUrl, setCustomsPdfUrl] = useState<string | null>(null);
 const [showCustomsModal, setShowCustomsModal] = useState(false);
 const [customsPdfBlob, setCustomsPdfBlob] = useState<Blob | null>(null);
 
 const handleAnalyzeDocuments = async () => {
-    // 1. Safety Guard: Check if a valid shipment is actively selected
     if (!clickedShipmentData?.referenceNumber || clickedShipmentData.referenceNumber === "shipment reference number") {
         toast.error(t("Please select a valid shipment from the tracking list first."));
         return;
     }
 
-    // 2. Safety Guard: Check if the shipment actually has documents attached to analyze
     if (allDocuments.length === 0) {
         toast.error(t("This shipment has no uploaded documents to analyze. Please add documents first."));
         return;
     }
 
-    // 3. Update UI to a processing state and open the loading blocker overlay
     setAiResultContent(t("Analyzing documents... Please wait."));
     
     const toastId = toast.loading(t("Analyzing documents... This may take a moment."));
 
     try {
-        // 4. Construct URL targeted directly at our new proxy endpoint
         const url = `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/api/ai/analyze-documents?referenceNumber=${encodeURIComponent(clickedShipmentData.referenceNumber)}`;
         
         const response = await jamrikFetch(url, {
-            method: "POST", // Using POST since Spring proxy is PostMapping
+            method: "POST", 
             credentials: "include",
         });
 
@@ -315,22 +310,18 @@ const handleAnalyzeDocuments = async () => {
     } catch (error) {
         const fallbackErrorMessage = error instanceof Error ? error.message : t("Could not communicate with the analysis server.");
         
-        // Reset state back to a clean alert if the backend drops/fails
         setAiResultContent(t("Failed to run analysis. Check connection protocols."));
         
         toast.error(fallbackErrorMessage, { id: toastId });
     }
 };
 
-// Generate Customs Declaration Form handler
 const handleGenerateCustomsDeclaration = async () => {
-    // Safety Guard: Check if a valid shipment is actively selected
     if (!clickedShipmentData?.referenceNumber || clickedShipmentData.referenceNumber === "shipment reference number") {
         toast.error(t("Please select a valid shipment from the tracking list first."));
         return;
     }
 
-    // Safety Guard: Check if the shipment has documents
     if (allDocuments.length === 0) {
         toast.error(t("This shipment has no uploaded documents to analyze. Please add documents first."));
         return;
@@ -355,7 +346,6 @@ const handleGenerateCustomsDeclaration = async () => {
         if (data.download_url) {
             const pdfUrl = `${process.env.NEXT_PUBLIC_AI_API_URL || 'http://localhost:8000'}${data.download_url}`;
             
-            // Fetch the PDF blob from FastAPI
             const pdfResponse = await jamrikFetch(pdfUrl);
             const blob = await pdfResponse.blob();
             const localPdfUrl = URL.createObjectURL(blob);
@@ -379,7 +369,6 @@ const handleGenerateCustomsDeclaration = async () => {
     }
 };
 
-// Download the generated PDF
 const handleDownloadCustomsPdf = () => {
     if (customsPdfBlob) {
         const url = URL.createObjectURL(customsPdfBlob);
@@ -393,7 +382,6 @@ const handleDownloadCustomsPdf = () => {
     }
 };
 
-// Close the PDF modal
 const handleCloseCustomsModal = () => {
     setShowCustomsModal(false);
     if (customsPdfUrl) {
@@ -453,7 +441,7 @@ const handleCloseCustomsModal = () => {
                 </div>
               <button 
                 className="removeFileBtn" 
-                onClick={() => handleDeleteDocument(doc.documentName)}
+                onClick={() => confirmDeleteDocument(doc.documentName)}
               >
                 ✖️
               </button>
@@ -570,6 +558,30 @@ const handleCloseCustomsModal = () => {
                         <button 
                             onClick={handleDeleteShipment}
                             style={{ padding: "10px 20px", backgroundColor: "#d9534f", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: "bold" }}
+                        >
+                            {t("Delete")}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* Delete Document Confirmation Modal */}
+        {deleteDocumentModalOpen && (
+            <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.5)", display: "flex", justifyContent: "center", alignItems: "center", zIndex: 1000 }}>
+                <div style={{ backgroundColor: "#FFFFFF", padding: "24px", borderRadius: "10px", width: "400px", display: "flex", flexDirection: "column", gap: "16px", boxShadow: "0px 4px 6px rgba(0,0,0,0.1)" }}>
+                    <h2 style={{ fontSize: "20px", fontWeight: "600", color: "#1C398E", margin: 0 }}>{t("Delete Document")}</h2>
+                    <p style={{ color: "#463f3f", fontSize: "16px", margin: 0 }}>{t("Are you sure you want to delete this document?")}</p>
+                    <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "10px" }}>
+                        <button 
+                            onClick={() => { setDeleteDocumentModalOpen(false); setDocumentToDelete(null); }}
+                            style={{ padding: "10px 20px", backgroundColor: "#ccc", color: "#333", borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: "bold" }}
+                        >
+                            {t("Cancel")}
+                        </button>
+                        <button 
+                            onClick={handleDeleteDocument}
+                            style={{ padding: "10px 20px", backgroundColor: "#1C398E", color: "#fff", borderRadius: "5px", border: "none", cursor: "pointer", fontWeight: "bold" }}
                         >
                             {t("Delete")}
                         </button>

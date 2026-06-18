@@ -263,3 +263,77 @@
 .generateFormButton:disabled:hover {
     background-color: #A0A0A0;
 }
+/* Universal Modal Styles */
+.universalModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.universalModalContent {
+    background-color: #FFFFFF;
+    padding: 24px;
+    border-radius: 10px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0px 4px 6px rgba(0,0,0,0.1);
+}
+
+.universalModalTitle {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.universalModalTitle.primary {
+    color: #1C398E;
+}
+
+.universalModalTitle.danger {
+    color: #d9534f;
+}
+
+.universalModalText {
+    color: #463f3f;
+    font-size: 16px;
+    margin: 0;
+}
+
+.universalModalActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.universalModalBtn {
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.universalModalBtn.cancel {
+    background-color: #ccc;
+    color: #333;
+}
+
+.universalModalBtn.primary {
+    background-color: #1C398E;
+    color: #fff;
+}
+
+.universalModalBtn.danger {
+    background-color: #d9534f;
+    color: #fff;
+}
