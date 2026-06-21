@@ -11,6 +11,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  jamrik_ai:
+    build:
+      context: ../../jamrik-ai-service
+      dockerfile: Dockerfile
+    container_name: jamrik_ai
+    env_file:
+      - .env
+    environment:
+      - VECTOR_DB_PATH=/app/jamrik_vectordb
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080
+    ports:
+      - "8000:8000"
 
   app:
     build: .
@@ -19,6 +31,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
+      - jamrik_ai
     env_file:
       - .env
     environment:
@@ -26,6 +39,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
       - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
       - SPRING_AI_GOOGLE_AI_API_KEY=${SPRING_AI_GOOGLE_AI_API_KEY}
+      - JAMRIK_AI_SERVICE_BASE_URL=http://jamrik_ai:8000
 
   frontend:
     build:
