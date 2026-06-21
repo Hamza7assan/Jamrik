@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  jamrik_db:
+    image: postgres:15
+    container_name: jamrik_db
+    environment:
+      POSTGRES_DB: jamrik
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - jamrik_network
+
+  jamrik_ai:
+    image: hamzahassann/jamrik_ai_engine:latest
+    container_name: jamrik_ai
+    env_file:
+      - .env
+    environment:
+      - VECTOR_DB_PATH=/app/jamrik_vectordb
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080
+    ports:
+      - "8000:8000"
+    networks:
+      - jamrik_network
+
+  jamrik_backend:
+    image: hamzahassann/jamrik_app:latest
+    container_name: jamrik_backend
+    environment:
+      - DB_URL=jdbc:postgresql://jamrik_db:5432/jamrik
+      - AI_SERVICE_URL=http://jamrik_ai:8000
+      - cors.allowed-origins=http://localhost:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      - jamrik_db
+      - jamrik_ai
+    networks:
+      - jamrik_network
+
+  jamrik_ui:
+    image: hamzahassann/jamrik_frontend:latest
+    container_name: jamrik_ui
+    ports:
+      - "3000:3000" 
+    networks:
+      - jamrik_network
+
+volumes:
+  postgres_data: 
+  
+networks:
+  jamrik_network:
+    driver: bridge
